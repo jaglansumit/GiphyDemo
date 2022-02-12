@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import Heading from '../components/common/Heading';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import SearchBar from '../components/common/SearchBar';
-import TrendingItem from '../components/flatlist/TrendingItem';
-import GiphyListItem from '../components/flatlist/GiphyListItem';
+import TrendingComponent from '../components/Trending/TrendingComponent';
+import GiphyListComponent from '../components/GiphyListComponent/GiphyListComponent';
 import {api_key, baseURL} from '../utils/lib/config';
 import axios from 'axios';
 
-const { height, width } = Dimensions.get('window');
 
 const Home = () => {
   const [trending, setTrending] = useState([])
@@ -23,7 +20,7 @@ const Home = () => {
   }, []);
 
   const _fetchTrending = async () => {
-    const URL = `${baseURL}trending?api_key=${api_key}`;
+    const URL = `${baseURL}trending?api_key=${api_key}&offset=0`;
     const res = await axios.get(URL);
     let data = res.data.data;
     trendingData = data.splice(0, 10);
@@ -38,7 +35,7 @@ const Home = () => {
     const res = await axios.get(URL);
     let data = res.data.data;
     console.log('First User Search ', data[0].title)
-    searchedData = data.splice(0,20);
+    let searchedData = data.splice(0,20);
     setTitle('Searched Result')
     setRawData(searchedData)
     setIsSearch(true);
@@ -57,53 +54,25 @@ const Home = () => {
   return (
     <SafeAreaView>
 
-      <SearchBar isSearch={is_search} onClick={(text) => _searchItem(text)} />
-
-          <View style={{ marginTop: 20 }}>
-            <Heading title="Trending GIPHY" />
-          </View>
-
-          <FlatList
-            style={{ marginLeft: 4 }}
-            data={trending}
-            horizontal={true}
-            keyExtractor={item => item.id}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TrendingItem width={item.images.fixed_height.width}
-                image={item.images.fixed_height.url}
-                title={item.title}>
-              </TrendingItem>
-            )}
+          <SearchBar 
+            isSearch={is_search} 
+            onClick={(text) => _searchItem(text)} 
           />
 
-          <View style={{ marginTop: 20, justifyContent: 'space-between', flexDirection: 'row' }}>
-            <Heading title={title} />
-           {is_search ?  <Text style={{color: 'red', alignSelf: 'center', marginRight: 20}} onPress={_clearSearch}>Reset</Text> : null }
-          </View>
+          <TrendingComponent 
+            data={trending} 
+          />
 
-          <FlatList
-            style={{ alignSelf: 'center', marginBottom: 20 }}
-            data={rawData}
-            numColumns={2}
-            keyExtractor={item => item.id}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <GiphyListItem
-                height={item.images.fixed_width.height}
-                image={item.images.fixed_width.url}>
-              </GiphyListItem>
-            )}
+
+          <GiphyListComponent 
+            data={rawData} 
+            is_search={is_search}
+            _clearSearch={_clearSearch}
+            title={title}
           />
 
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  flex: 1
-})
 
 export default Home;

@@ -29,6 +29,3 @@ const styles = StyleSheet.create({
 
 
 export default TrendingItem;
-
-
-// https://g.tenor.com/v1/categories?type=featured //Featured Key
