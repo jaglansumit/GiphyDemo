@@ -4,19 +4,21 @@ import FastImage from 'react-native-fast-image';
 
 const {height, width} = Dimensions.get('window');
 
-const TrendingItem = (props) => {
+const GiphyListItem = (props) => {
     
     return (
-        <View style={{marginBottom: 10, marginRight: 5}}>
-            <FastImage
-            style={{ height: 120, width: parseInt(props.width) - 60 }}
+        <View style={{ margin: 2 }}>
+        <FastImage
+            style={{ height: parseInt(props.height), width: width / 2 - 10, }}
             source={{
-                uri: props.image
+                uri: props.image,
+                headers: { Authorization: 'token' },
+                priority: FastImage.priority.normal,
+                cache: FastImage.cacheControl.immutable,
             }}
             resizeMode='stretch'
-            />  
-            <Text style={{textAlign: 'center', fontSize: 15, fontWeight: '700', margin: 5}}>{props.title.split(' ').slice(0,2).join(' ')}</Text>
-   </View>
+        />
+      </View>
     );
 }
 
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
 })
 
 
-export default TrendingItem;
+export default GiphyListItem;
 
 
 // https://g.tenor.com/v1/categories?type=featured //Featured Key

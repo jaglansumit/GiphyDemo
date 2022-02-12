@@ -1,13 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SearchBar = () => {
+const SearchBar = (props) => {
+    const [search, setSearch] = useState('');
+
+    const _onsearch = () => {
+        console.log('Search Text ----------> ',search);
+        if(search.trim() !== '')
+        {
+        props.onClick(search)
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.searchbarContainer}>
-                <TextInput placeholder="Search GIPHY"></TextInput>
-                <Icon name="search" style={{alignSelf: 'center', marginRight: 10}} size={20} color="black" />
+                <TextInput placeholder="Search GIPHY" onChangeText={setSearch}></TextInput>
+                <Icon onPress={_onsearch} name="search" style={{alignSelf: 'center', marginRight: 10}} size={20} color="black" />
             </View>
        </View>
     );
