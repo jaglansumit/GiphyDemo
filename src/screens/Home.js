@@ -5,8 +5,7 @@ import Heading from '../components/common/Heading';
 import SearchBar from '../components/common/SearchBar';
 import TrendingItem from '../components/flatlist/TrendingItem';
 import GiphyListItem from '../components/flatlist/GiphyListItem';
-import SearchListItem from '../components/flatlist/SearchListItem';
-import FastImage from 'react-native-fast-image';
+import {api_key, baseURL} from '../utils/lib/config';
 import axios from 'axios';
 
 const { height, width } = Dimensions.get('window');
@@ -24,7 +23,7 @@ const Home = () => {
   }, []);
 
   const _fetchTrending = async () => {
-    const URL = `https://api.giphy.com/v1/gifs/trending?api_key=jTsnGpyNVTLQKFcClczKq0l0XlMDnl6A`;
+    const URL = `${baseURL}trending?api_key=${api_key}`;
     const res = await axios.get(URL);
     let data = res.data.data;
     trendingData = data.splice(0, 10);
@@ -35,7 +34,7 @@ const Home = () => {
   };
 
   const _fetchUserSearch = async (text) => {
-    const URL = `https://api.giphy.com/v1/gifs/search?api_key=jTsnGpyNVTLQKFcClczKq0l0XlMDnl6A&q=${text}`;
+    const URL = `${baseURL}search?api_key=${api_key}&q=${text}`;
     const res = await axios.get(URL);
     let data = res.data.data;
     console.log('First User Search ', data[0].title)
