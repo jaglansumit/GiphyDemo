@@ -39,7 +39,6 @@ const Home = () => {
     let data = res.data.data;
     console.log('First User Search ', data[0].title)
     searchedData = data.splice(0,20);
-    setSearchData(searchedData);
     setTitle('Searched Result')
     setRawData(searchedData)
     setIsSearch(true);
