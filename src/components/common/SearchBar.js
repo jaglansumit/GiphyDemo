@@ -15,8 +15,10 @@ const SearchBar = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.searchbarContainer}>
-                <TextInput placeholder="Search GIPHY" onChangeText={setSearch}></TextInput>
+                <TextInput style={{ flex: 6, paddingLeft: 10}} placeholder="Search GIPHY" onChangeText={setSearch}></TextInput>
+                <View style={{ flex: 2, alignSelf: 'center', justifyContent: 'flex-end', alignContent: 'flex-end'}}>
                 <Icon onPress={_onsearch} name="search" style={{alignSelf: 'center', marginRight: 10}} size={20} color="black" />
+                </View>
             </View>
        </View>
     );

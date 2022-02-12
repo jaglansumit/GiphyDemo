@@ -13,21 +13,24 @@ const Home = () => {
   const [rawData, setRawData] = useState([])
   const [title, setTitle] = useState("Featured Gif's")
   const [is_search, setIsSearch] = useState(false)
-  const [searchData, setSearchData] = useState([])
+  const [offset ,setOffset] = useState(0)
 
   useEffect(() => {
+    if(!is_search)
+    {
     _fetchTrending();
-  }, []);
+    }
+  }, [offset]);
 
   const _fetchTrending = async () => {
-    const URL = `${baseURL}trending?api_key=${api_key}&offset=0`;
+    const URL = `${baseURL}trending?api_key=${api_key}&offset=${offset}`;
     const res = await axios.get(URL);
     let data = res.data.data;
     trendingData = data.splice(0, 10);
     featuredData = data.splice(11, 50);
-    setRawData(featuredData);
+    setRawData(prevArray => [...prevArray, ...featuredData]);
     setTrending(trendingData);
-    setOtherGifs(featuredData);
+    setOtherGifs(prevArray => [...prevArray, ...featuredData]);
   };
 
   const _fetchUserSearch = async (text) => {
@@ -51,6 +54,13 @@ const Home = () => {
     setIsSearch(false)
   }
 
+  const _handleLoadMore = async () => {
+    const CurrentOffset = offset;
+    const afterSet = CurrentOffset + 50;
+    console.log('Handle More', afterSet);
+    setOffset(afterSet);
+  }
+
   return (
     <SafeAreaView>
 
@@ -59,15 +69,18 @@ const Home = () => {
             onClick={(text) => _searchItem(text)} 
           />
 
+        {is_search ? null : (
           <TrendingComponent 
             data={trending} 
           />
+        )} 
 
 
           <GiphyListComponent 
             data={rawData} 
             is_search={is_search}
             _clearSearch={_clearSearch}
+            _handleLoadMore={_handleLoadMore}
             title={title}
           />
 
